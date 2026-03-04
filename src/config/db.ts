@@ -1,20 +1,7 @@
-/* =========================
-  Issue: ada di root
-  Tugas:
-    1. Pindahkan ke file khusus, dalam folder yang sesuai (config/db.ts)
-    2. Pindahkan kode process.env ke dalam file khusus (config/env.ts) bersama env yang ada di index.ts
-    2. jangan gunakan `process.env`, tapi gunakan dari import env di env.ts
-========================= */
-
 import { Database } from "bun:sqlite";
+import { env } from "./env";
 
-const dbFile = process.env.DB_FILE || "database.sqlite";
-
-export const db = new Database(dbFile);
-
-/* =========================
-   INIT TABLE
-========================= */
+export const db = new Database(env.DB_FILE);
 
 export const initDB = () => {
   db.exec(`
@@ -25,7 +12,6 @@ export const initDB = () => {
     );
   `);
 
-  // Seed jika kosong
   const count = db.query("SELECT COUNT(*) as total FROM users").get() as { total: number };
 
   if (count.total === 0) {
